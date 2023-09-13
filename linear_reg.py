@@ -178,7 +178,7 @@ y_pred_test_enm = best_enm_model.predict(X_test)
 mse_test_enm = mean_squared_error(y_test, y_pred_test_enm)
 print(f"Mean Squared Error (Elastic Net - Test): {mse_test_enm}")
 
-##########################
+##########################AVERAGING
 y_pred_test_ensemble = (y_pred_test_rf + y_pred_test_gb + y_pred_test_xgb + y_pred_test_enm) / 4
 
 #mse for ensemble on train
@@ -190,7 +190,11 @@ y_pred_test_data_rf = best_rf_model.predict(X_test_selected)
 y_pred_test_data_gb = best_gb_model.predict(X_test_selected)
 y_pred_test_data_xgb = best_xgb_model.predict(X_test_selected)
 y_pred_test_data_enm = best_enm_model.predict(X_test_selected)
-#combine preds using averaging
+#combine preds using simple averaging
+
+
+
+
 y_pred_test_data_ensemble = (y_pred_test_data_rf + y_pred_test_data_gb + y_pred_test_data_xgb + y_pred_test_data_enm) / 4
 
 #convert from log representation
@@ -199,3 +203,41 @@ y_pred_test_original_ensemble = np.exp(y_pred_test_data_ensemble)
 test_predictions_ensemble = pd.DataFrame({'Id': X_test_data['Id'], 'SalePrice': y_pred_test_original_ensemble})
 
 test_predictions_ensemble.to_csv('predictions_ensemble_4.csv', index=False)
+
+#############################WEIGHTED
+
+epsilon = 1e-6
+weights = {
+    'random_forest': 1 / (mse_test_rf + epsilon),
+    'gradient_boosting': 1 / (mse_test_gb + epsilon),
+    'xgboost': 1 / (mse_test_xgb + epsilon),
+    'elastic_net': 1 / (mse_test_enm + epsilon)
+}
+
+total_weight = sum(weights.values())
+normalized_weights = {model: weight / total_weight for model, weight in weights.items()}
+
+y_pred_test_ensemble_weighted = (
+    normalized_weights['random_forest'] * y_pred_test_rf +
+    normalized_weights['gradient_boosting'] * y_pred_test_gb +
+    normalized_weights['xgboost'] * y_pred_test_xgb +
+    normalized_weights['elastic_net'] * y_pred_test_enm
+)
+
+mse_test_ensemble_weighted = mean_squared_error(y_test, y_pred_test_ensemble_weighted)
+print(f"Mean Squared Error (Weighted Ensemble - Test): {mse_test_ensemble_weighted}")
+
+y_pred_test_data_ensemble_weighted = (
+    normalized_weights['random_forest'] * y_pred_test_data_rf +
+    normalized_weights['gradient_boosting'] * y_pred_test_data_gb +
+    normalized_weights['xgboost'] * y_pred_test_data_xgb +
+    normalized_weights['elastic_net'] * y_pred_test_data_enm
+)
+
+y_pred_test_original_ensemble_weighted = np.exp(y_pred_test_data_ensemble_weighted)
+
+# Create a DataFrame for test predictions
+test_predictions_ensemble_weighted = pd.DataFrame({'Id': X_test_data['Id'], 'SalePrice': y_pred_test_original_ensemble_weighted})
+
+# Save the test predictions to a CSV file
+test_predictions_ensemble_weighted.to_csv('predictions_ensemble_4_weighted.csv', index=False)
