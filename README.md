@@ -23,5 +23,6 @@ Testing different model ensembles on the Kaggle House Prices dataset - house pri
    - RMSE = 0.13602
 8. Hypertuned Neural Network with L1 Reg and Dropout layers
    - RMSE = 0.15791
-
+9. Meta model - Linear Regression (5 stack - Random Forest + Gradient Boosting + XGBoost + ElasticNet Regressors + CatBoost)
+   - RMSE = 0.17397
 
