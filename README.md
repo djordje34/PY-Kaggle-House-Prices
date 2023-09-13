@@ -8,6 +8,7 @@
 3. Ensemble (-||- + XGBoost Regressor) - MSE = 0.14449
 4. Ensemble (Hypertuned RF + GB + XGB Regressors) - MSE = 0.14014
 5. Ensemble (-||- + Hypertuned ElasticNet) - MSE = 0.137
-6. Hypertuned Neural Network - MSE = 0.15791
+6. Weighted Ensemble (-||-) - MSE = 0.13685
+7. Hypertuned Neural Network - MSE = 0.15791
 
 
