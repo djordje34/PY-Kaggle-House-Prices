@@ -6,6 +6,7 @@ from sklearn.model_selection import GridSearchCV, train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error
 from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
+from sklearn.linear_model import ElasticNet
 import xgboost as xgb
 
 #dataset
@@ -157,8 +158,28 @@ mse_test_xgb = mean_squared_error(y_test, y_pred_test_xgb)
 print(f"Mean Squared Error (XGBoost - Test): {mse_test_xgb}")
 
 
+elastic_net = ElasticNet()
+param_grid = {
+        'alpha': [0.01, 0.1, 0.5, 1.0],
+        'l1_ratio': [0.1, 0.3, 0.5, 0.7, 0.9]
+    }
+elastic_net_model_search = GridSearchCV(elastic_net, param_grid, cv=5, scoring='neg_mean_squared_error', n_jobs=-1)
+elastic_net_model_search.fit(X_train, y_train)
+
+best_enm_params = elastic_net_model_search.best_params_
+print("Best Elastic Net HyperParameters:")
+print(best_enm_params)
+
+best_enm_model = ElasticNet(random_state=42, **best_enm_params)
+best_enm_model.fit(X_train,y_train)
+
+y_pred_test_enm = best_enm_model.predict(X_test)
+
+mse_test_enm = mean_squared_error(y_test, y_pred_test_enm)
+print(f"Mean Squared Error (Elastic Net - Test): {mse_test_enm}")
+
 ##########################
-y_pred_test_ensemble = (y_pred_test_rf + y_pred_test_gb + y_pred_test_xgb) / 3
+y_pred_test_ensemble = (y_pred_test_rf + y_pred_test_gb + y_pred_test_xgb + y_pred_test_enm) / 4
 
 #mse for ensemble on train
 mse_test_ensemble = mean_squared_error(y_test, y_pred_test_ensemble)
@@ -168,13 +189,13 @@ print(f"Mean Squared Error (Ensemble - Test): {mse_test_ensemble}")
 y_pred_test_data_rf = best_rf_model.predict(X_test_selected)
 y_pred_test_data_gb = best_gb_model.predict(X_test_selected)
 y_pred_test_data_xgb = best_xgb_model.predict(X_test_selected)
-
+y_pred_test_data_enm = best_enm_model.predict(X_test_selected)
 #combine preds using averaging
-y_pred_test_data_ensemble = (y_pred_test_data_rf + y_pred_test_data_gb + y_pred_test_data_xgb) / 3
+y_pred_test_data_ensemble = (y_pred_test_data_rf + y_pred_test_data_gb + y_pred_test_data_xgb + y_pred_test_data_enm) / 4
 
 #convert from log representation
 y_pred_test_original_ensemble = np.exp(y_pred_test_data_ensemble)
 
 test_predictions_ensemble = pd.DataFrame({'Id': X_test_data['Id'], 'SalePrice': y_pred_test_original_ensemble})
 
-test_predictions_ensemble.to_csv('predictions_ensemble_3.csv', index=False)
+test_predictions_ensemble.to_csv('predictions_ensemble_4.csv', index=False)
