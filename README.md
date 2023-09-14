@@ -9,24 +9,24 @@ Testing different model ensembles on the Kaggle House Prices dataset - house pri
 
 1. Linear Regression
     - RMSE = 0.15305
-3. Ensemble (Random Forest + Gradient Boosting Regressors)
+2. Ensemble (Random Forest + Gradient Boosting Regressors)
     - RMSE = 0.14472
-4. Ensemble (Random Forest + Gradient Boosting + XGBoost Regressors)
+3. Ensemble (Random Forest + Gradient Boosting + XGBoost Regressors)
     - RMSE = 0.14449
-5. Ensemble of hypertuned models (Random Forest + Gradient Boosting + XGBoost Regressors)
+4. Ensemble of hypertuned models (Random Forest + Gradient Boosting + XGBoost Regressors)
     - RMSE = 0.14014
-6. Ensemble of hypertuned models (Random Forest + Gradient Boosting + XGBoost + ElasticNet Regressors)
+5. Ensemble of hypertuned models (Random Forest + Gradient Boosting + XGBoost + ElasticNet Regressors)
    - RMSE = 0.137
-7. Weighted Ensemble of hypertuned models (Random Forest + Gradient Boosting + XGBoost + ElasticNet Regressors)
+6. Weighted Ensemble of hypertuned models (Random Forest + Gradient Boosting + XGBoost + ElasticNet Regressors)
    - RMSE = 0.13685
-8. Weighted Ensemble of hypertuned models (Random Forest + Gradient Boosting + XGBoost + ElasticNet Regressors + CatBoost)
+7. Weighted Ensemble of hypertuned models (Random Forest + Gradient Boosting + XGBoost + ElasticNet Regressors + CatBoost)
    - RMSE = 0.13602
-9. Weighted Ensemble of hypertuned models (Random Forest + Gradient Boosting + XGBoost + ElasticNet Regressors + CatBoost) with feature selection
+8. Weighted Ensemble of hypertuned models (Random Forest + Gradient Boosting + XGBoost + ElasticNet Regressors + CatBoost) with feature selection
    - RMSE = 0.13341
-10. **Weighted Ensemble of hypertuned models (Random Forest + Gradient Boosting + XGBoost + ElasticNet Regressors + CatBoost) with feature selection and elimination using z-score**
-   - RMSE = 0.12845
-9. Hypertuned Neural Network with L1 Reg and Dropout layers
-   - RMSE = 0.15791
-10. Meta model - Linear Regression (5 stack - Random Forest + Gradient Boosting + XGBoost + ElasticNet Regressors + CatBoost)
-   - RMSE = 0.17397
+9. Weighted Ensemble of hypertuned models (Random Forest + Gradient Boosting + XGBoost + ElasticNet Regressors + CatBoost) with feature selection and elimination using z-score
+   - **RMSE = 0.12845**
+10. Hypertuned Neural Network with L1 Reg and Dropout layers
+    - RMSE = 0.15791
+11. Meta model - Linear Regression (5 stack - Random Forest + Gradient Boosting + XGBoost + ElasticNet Regressors + CatBoost)
+    - RMSE = 0.17397
    
